@@ -1673,6 +1673,33 @@
     /* smoke canvases render muddy on light -> hide, sit on clean mesh */
     [data-theme="light"] #stats-smoke,
     [data-theme="light"] #comparison-smoke { display: none; }
+
+    /* ─── TICKER → MURO ESTÁTICO EN MOBILE ───
+       La cinta animada de ~6500px crea una capa de GPU gigante que
+       Safari iOS tarda segundos en pintar (franja blanca sin logos).
+       En pantallas chicas mostramos los 17 logos en grilla estática. */
+    @media (max-width: 767px) {
+      .ticker-wrapper { margin: 0 20px; }
+      .ticker-wrapper::before, .ticker-wrapper::after { display: none; }
+      .ticker-track {
+        animation: none !important;
+        width: 100% !important;
+        flex-wrap: wrap;
+        justify-content: center;
+        padding: 14px 8px;
+      }
+      .ticker-item:nth-child(n+18) { display: none; } /* copias del loop */
+      .ticker-item { padding: 10px 14px; height: auto; border-right: none; }
+      .client-logo-img,
+      .client-logo-img.logo-dockers, .client-logo-img.logo-duoc,
+      .client-logo-img.logo-itau, .client-logo-img.logo-numancia,
+      .client-logo-img.logo-pillin, .client-logo-img.logo-labarra,
+      .client-logo-img.logo-dib, .client-logo-img.logo-bazhars {
+        height: 38px !important;
+        max-width: 108px !important;
+        padding: 0 !important;
+      }
+    }
     /* clients: title was hardcoded white -> dark ink on light */
     [data-theme="light"] #clients .section-title { color: #17171a; }
     [data-theme="light"] #clients .section-title .title-muted { color: rgba(24,24,27,0.55); }
