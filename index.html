@@ -2900,9 +2900,15 @@
     var numEls = section.querySelectorAll('.stat-number');
     var defs = [
       { prefix: '+USD ', end: 1,  suffix: 'M' },
-      { prefix: '+',    end: 7,   suffix: ' Años' },
+      { prefix: '+',    end: 7,   suffix: { es: ' Años', en: ' Years' } },
       { prefix: '+',    end: 10,  suffix: '' },
     ];
+    /* El contador reescribe el texto al hacer scroll, pisando la traducción.
+       Por eso el sufijo se resuelve en cada frame según el idioma activo. */
+    function suffixOf(def) {
+      if (typeof def.suffix === 'string') return def.suffix;
+      return document.documentElement.lang === 'en' ? def.suffix.en : def.suffix.es;
+    }
 
     function easeOutExpo(t) { return t >= 1 ? 1 : 1 - Math.pow(2, -10 * t); }
 
@@ -2913,7 +2919,7 @@
         var t0 = performance.now();
         (function tick(now) {
           var p = Math.min((now - t0) / duration, 1);
-          el.textContent = def.prefix + Math.round(easeOutExpo(p) * def.end) + def.suffix;
+          el.textContent = def.prefix + Math.round(easeOutExpo(p) * def.end) + suffixOf(def);
           if (p < 1) requestAnimationFrame(tick);
         })(performance.now());
       }, delay);
